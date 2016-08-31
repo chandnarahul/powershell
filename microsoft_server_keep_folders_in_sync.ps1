@@ -2,10 +2,10 @@ $defaultFile="default.csv"
 
 $updatedRecordsFile="updates.csv"
 
-$folderToCheck="C:\\Users\\test\\Desktop\\abc"
-$folderToUpdate="C:\Users\test\Desktop\abc2"
+$folderToCheck="C:\\test"
+$folderToUpdate="G:\"
 
-$excluded = @("*.log", "*log*", "bla.xml")
+$excluded = @("*.log", "*log*", "*.xml")
 
 
 function checkAndCreateNewFiles() {
@@ -27,7 +27,7 @@ function checkAndCreateNewFiles() {
 			if (!(Test-Path -path $destinationFolder)) {New-Item $destinationFolder -Type Directory}
 			
 			Copy-Item $sourceName -Destination $destinationFolder -Recurse -Force
-			Write-Host "creating new file [$($destinationFile)]"
+			logMsg("$((Get-Date).ToString()) copying file [$($destinationFile)]")
 		}
 	}
 }
@@ -44,7 +44,7 @@ function checkAndRemoveMissingFiles(){
 			$destinationFile=$destinationFile -replace '"', ""
 			
 			Remove-Item -Path $destinationFile -Recurse -Force
-			Write-Host "deleting removed file [$($destinationFile)]"
+			logMsg("$((Get-Date).ToString()) deleting removed file [$($destinationFile)]")
 		}
 	}
 }
@@ -75,6 +75,11 @@ function getUpdatedFilesHashTable(){
 
 function makeUpdatedListAsDefaultList() {
 	Copy-Item $updatedRecordsFile -Destination $defaultFile -Recurse
+}
+
+function logMsg($msg) {
+    write-output $msg
+    write-host $msg 
 }
 
 #script execution will start from here ..
